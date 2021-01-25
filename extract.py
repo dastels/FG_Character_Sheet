@@ -99,6 +99,14 @@ def extract_race(character):
     return extract_text(find_first_child_named(character, "race"))
 
 
+def extract_age(character):
+    return extract_text(find_first_child_named(character, "age"))
+
+
+def extract_appearance(character):
+    return extract_text(find_first_child_named(character, "appearance"))
+
+
 def extract_abilities(character):
     abilities = {}
     abilities_element = find_first_child_named(character, "abilities")
@@ -391,7 +399,7 @@ def extract_spells(character):
 # Process the file
 ################################################################################
 
-dom_tree = xml.dom.minidom.parse("Simone_with_wand.xml")
+dom_tree = xml.dom.minidom.parse("Simone_with_personal.xml")
 character = dom_tree.documentElement.getElementsByTagName("character")[0]
 
 print("Name: {0}".format(extract_name(character)))
@@ -416,6 +424,10 @@ for hp_name in HP_TYPES:
 print("Alignment: {0}".format(extract_alignment(character)))
 
 print("Size: {0}".format(extract_size(character)))
+
+print("Age: {0}".format(extract_age(character)))
+
+print("Appearance: {0}".format(extract_appearance(character)))
 
 print("Speed:")
 speed_data = extract_speed(character)
