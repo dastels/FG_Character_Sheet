@@ -12,7 +12,6 @@ ABILITY_NAMES = [
 SAVE_NAMES = ["fortitude", "reflex", "will"]
 HP_TYPES = ["nonlethal", "temporary", "wounds", "total"]
 INIT_TYPES = ["abilitymod", "misc", "temporary", "total"]
-SPEED_TYPES = ["armor", "base", "final", "misc", "temporary", "total"]
 AC_TYPES = ["cmd", "flatfooted", "general", "touch"]
 AC_SOURCES = [
     "abilitymod",
