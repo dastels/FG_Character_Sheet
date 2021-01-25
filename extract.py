@@ -333,6 +333,60 @@ def extract_inventory(character):
     return inventory
 
 
+def extract_special_abilities(character):
+    return [
+        extract_text(find_first_child_named(ability_element, "name"))
+        for ability_element in [
+            el
+            for el in find_first_child_named(character, "specialabilitylist").childNodes
+            if isinstance(el, xml.dom.minidom.Element)
+        ]
+    ]
+
+
+def extract_spells(character):
+    spells = {}
+    spellset = find_first_child_named(character, "spellset")
+    first_set = find_first_child_named(spellset, "id-00001")
+    spells["dc"] = extract_text(
+        find_first_child_named(find_first_child_named(first_set, "dc"), "total")
+    )
+    for level in [
+        el
+        for el in find_first_child_named(first_set, "levels").childNodes
+        if isinstance(el, xml.dom.minidom.Element)
+    ]:
+        level_name = extract_text(find_first_child_named(level, "level"))
+        spells[level_name] = []
+        for spell_element in [
+            el
+            for el in find_first_child_named(level, "spells").childNodes
+            if isinstance(el, xml.dom.minidom.Element)
+        ]:
+            spells[level_name].append(
+                {
+                    "name": extract_text(find_first_child_named(spell_element, "name")),
+                    "range": extract_text(
+                        find_first_child_named(spell_element, "range")
+                    ),
+                    "save": extract_text(find_first_child_named(spell_element, "save")),
+                    "summary": extract_text(
+                        find_first_child_named(spell_element, "shortdescription")
+                    ),
+                    "sr": extract_text(find_first_child_named(spell_element, "sr")),
+                    "school": extract_text(
+                        find_first_child_named(spell_element, "school")
+                    )
+                    .split()[0]
+                    .lower(),
+                    "duration": extract_text(
+                        find_first_child_named(spell_element, "duration")
+                    ),
+                }
+            )
+    return spells
+
+
 ################################################################################
 # Process the file
 ################################################################################
