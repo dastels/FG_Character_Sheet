@@ -396,7 +396,8 @@ character = dom_tree.documentElement.getElementsByTagName("character")[0]
 
 print("Name: {0}".format(extract_name(character)))
 
-print("Level: {0}".format(extract_level(character)))
+character_level = extract_level(character)
+print("Level: {0}".format(character_level))
 
 print("Class Level: {0}".format(extract_class_level(character)))
 
@@ -502,3 +503,144 @@ for item in extract_inventory(character):
     print("    weight: {0}".format(item["weight"]))
     if item["slot"]:
         print("    slot: {0}".format(item["slot"]))
+
+print("Special Abilities:")
+for ability in extract_special_abilities(character):
+    print("  {0}".format(ability))
+
+
+def summarize_save(spell, dc):
+    if spell["save"] is None:
+        return ""
+    elif "will" in spell["save"].lower():
+        return "Will {0}".format(dc)
+    elif "reflex" in spell["save"].lower():
+        return "Ref {0}".format(dc)
+    elif "fortitude" in spell["save"].lower():
+        return "Fort {0}".format(dc)
+    else:
+        return ""
+
+
+def contains_number(s):
+    for digit in range(0, 10):
+        if s.find(str(digit)) > -1:
+            return True
+    return False
+
+
+def pluralize(unit, value):
+    if value == 1 or unit[-1] == "s" or unit == "ft.":
+        return unit
+    elif unit[-1] == ".":
+        return unit[:-1] + "s."
+    else:
+        return unit + "s"
+
+
+def process_equation(duration, lvl):
+    # print("PROCESSING {0}".format(duration))
+    local_duration = duration.lower()
+    level = int(lvl)
+
+    if local_duration.endswith("(d)"):
+        local_duration = local_duration[:-3]
+
+    # extract the equation
+    open_paran_index = local_duration.find("(")
+    if open_paran_index > -1:
+        closing_paren_index = local_duration.find(")")
+        local_duration = local_duration[open_paran_index + 1 : closing_paren_index]
+
+    # drop any preamble
+    if local_duration.find(",") > -1:
+        local_duration = local_duration.split(",")[1]
+
+    if local_duration.find("up to") > -1:
+        local_duration = local_duration.split("up to")[1].strip()
+    elif local_duration.find("or") > -1:
+        terms = local_duration.split("or")
+        local_duration = (
+            terms[0].strip() if contains_number(terms[0]) else terms[1].strip()
+        )
+        # print("--> {0}".format(local_duration))
+
+    # check if it's a compound term
+    plus_index = local_duration.find("+")
+    if plus_index > -1:  # it's base + variable
+        base_term = local_duration[:plus_index].strip()
+        variable_term = local_duration[plus_index + 1 :].strip()
+    elif local_duration.find("/") > -1:  # check if it's a variable term
+        base_term = "0"
+        variable_term = local_duration  # it is.. no base, but variable
+    else:  # no variable term, just a constant
+        base_term = local_duration
+        variable_term = "0"
+
+    # process the variable part
+    if variable_term != "0":
+        per_index = variable_term.find("/")  # we know it's there
+        variable_item = variable_term[:per_index].strip()
+        if variable_item.find(" ") > -1:
+            variable_constant, variable_unit = variable_item.split()
+        else:
+            variable_constant = variable_item
+            variable_unit = ""
+        multiplier = variable_term[per_index + 1 :].strip()
+    else:
+        variable_constant = "0"
+        variable_unit = ""
+        multiplier = "0"
+
+    if base_term.find(" ") > -1:
+        constant, unit = base_term.split()[-2:]
+    else:
+        constant = base_term
+        unit = ""
+
+    # constant + variable_constant * multiplier
+    try:
+        constant = int(constant)
+    except:
+        pass
+    variable_constant = int(variable_constant)
+    if multiplier == "level":
+        multiplier = level
+    elif multiplier.endswith("levels"):
+        multiplier = level / int(multiplier.split()[0].strip())
+    else:
+        multiplier = int(multiplier)
+    if unit == "":
+        unit = variable_unit
+
+    # print(
+    #     "CONSTANT: {0}, UNIT: {1}, VARIABLE_CONSTANT: {2}, MULTIPLIER: {3}".format(
+    #         constant, unit, variable_constant, multiplier
+    #     )
+    # )
+
+    if unit == "":
+        return constant
+    else:
+        value = constant + (variable_constant * multiplier)
+        return str("{0} {1}".format(value, pluralize(unit, value)))
+
+
+print("Spells:")
+spell_data = extract_spells(character)
+for level in range(0, 10):
+    print("  Level {0}".format(level))
+    for spell in spell_data[str(level)]:
+        print("    {0}".format(spell["name"]))
+        print("      School: {0}".format(spell["school"]))
+        print("      Save: {0}".format(summarize_save(spell, spell_data["dc"])))
+        print("      SR?: {0}".format(spell["sr"].lower() if spell["sr"] else ""))
+        print(
+            "      Range: {0}".format(process_equation(spell["range"], character_level))
+        )
+        print(
+            "      Duration: {0}".format(
+                process_equation(spell["duration"], character_level)
+            )
+        )
+        print("      Summary: {0}".format(spell["summary"]))
