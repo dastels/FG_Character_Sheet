@@ -946,24 +946,64 @@ def to_pdf(filename):
             can.drawString(480, 505 - (count * 53.5), weapon["range"])
         if weapon["ammo"]:
             can.drawString(525, 505 - (count * 53.5), weapon["ammo"])
-
-        # print("    Attack Bonus: {0}".format(weapon["attack_bonus"]))
-        # damage_bonus = int(weapon["damage_bonus"])
-        # print(
-        #     "    Damage: {0}{1}{2}".format(
-        #         weapon["damage_dice"],
-        #         damage_sign_of(damage_bonus),
-        #         abs_value_of(damage_bonus),
-        #     )
-        # )
-        # print("    Crit Range: {0}".format(weapon["crit_attack_range"]))
-        # print("    Crit Multipler: {0}".format(weapon["crit_multiplier"]))
-        # print("    Type: {0}".format(weapon["damage_type"]))
-        # if weapon["range"]:
-        #     print("    Range: {0}".format(weapon["range"]))
-        # if weapon["ammo"]:
-        #     print("    Ammo: {0}".format(weapon["ammo"]))
         count += 1
+
+    # Skills Page
+    can.showPage()
+
+    skill_locations = {
+        "Acrobatics": 704,
+        "Appraise": 690,
+        "Bluff": 676,
+        "Climb": 662,
+        "Craft": 648,
+        "Diplomacy": 620,
+        "Disable Device": 607,
+        "Disguise": 593,
+        "Escape Artist": 579,
+        "Fly": 565,
+        "Handle Animal": 552,
+        "Heal": 538,
+        "Intimidate": 524,
+        "Knowledge (Arcana)": 510,
+        "Knowledge (Dungeoneering)": 496,
+        "Knowledge (Engineering)": 482,
+        "Knowledge (Geography)": 468,
+        "Knowledge (History)": 454,
+        "Knowledge (Local)": 441,
+        "Knowledge (Nature)": 427,
+        "Knowledge (Nobility)": 413,
+        "Knowledge (Planes)": 399,
+        "Knowledge (Religion)": 385,
+        "Linguistics": 372,
+        "Perception": 358,
+        "Perform": 344,
+        "Profession": 317,
+        "Ride": 289,
+        "Sense Motive": 275,
+        "Sleight of Hand": 262,
+        "Spellcraft": 248,
+        "Stealth": 234,
+        "Survival": 220,
+        "Swim": 206,
+        "Use Magic Device": 192,
+    }
+
+    skill_data = extract_skills(character)
+    for skill, data in skill_data.items():
+        if skill in skill_locations:
+            y = skill_locations[skill]
+            if data["class_skill"] == "1":
+                can.drawString(44, y, "x")
+            can.setFont("Helvetica", 10)
+            if data["ranks"] != "0":
+                can.drawString(162, y, data["ranks"])
+            if data["ability_mod"] != "0":
+                can.drawString(235, y, data["ability_mod"])
+            if data["misc_bonus"] != "0":
+                can.drawString(378, y, data["misc_bonus"])
+            if data["total"] != "0":
+                can.drawString(450, y, data["total"])
 
     can.save()
 
@@ -981,6 +1021,10 @@ def to_pdf(filename):
     offense_page = existing_pdf.getPage(4)
     offense_page.mergePage(new_pdf.getPage(1))
     output.addPage(offense_page)
+
+    skill_page = existing_pdf.getPage(5)
+    skill_page.mergePage(new_pdf.getPage(2))
+    output.addPage(skill_page)
 
     # finally, write "output" to a real file
     outputStream = open("{0}.pdf".format(character_name), "wb")
