@@ -1064,6 +1064,7 @@ def to_pdf(filename):
     can.setFont("Helvetica", 8)
     for level in range(0, 10):
         for spell in spell_data[str(level)]:
+            can.setFont("Helvetica", 8)
             y = 708 - (line * 15.1)
             can.drawString(50, y, str(level))
             can.drawString(80, y, spell["name"])
