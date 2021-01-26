@@ -815,11 +815,23 @@ def dump(character_file):
 # dump("Simone_with_personal.xml")
 
 
+def extract_sub_skill(skill):
+    op_index = skill.find("(")
+    cp_index = skill.find(")")
+    return skill[op_index + 1 : cp_index]
+
+
+def partition(l, n):
+    for i in range(0, len(l), n):
+        yield l[i : i + n]
+
+
 def to_pdf(filename):
     dom_tree = xml.dom.minidom.parse(filename)
     character = dom_tree.documentElement.getElementsByTagName("character")[0]
 
     character_name = extract_name(character)
+    character_level = extract_level(character)
 
     # Character page
     packet = io.BytesIO()
@@ -956,7 +968,7 @@ def to_pdf(filename):
         "Appraise": 690,
         "Bluff": 676,
         "Climb": 662,
-        "Craft": 648,
+        "Craft": 649,
         "Diplomacy": 620,
         "Disable Device": 607,
         "Disguise": 593,
@@ -989,10 +1001,33 @@ def to_pdf(filename):
         "Use Magic Device": 192,
     }
 
+    number_of_crafts = 0
+    number_of_performs = 0
+    number_of_professions = 0
     skill_data = extract_skills(character)
     for skill, data in skill_data.items():
-        if skill in skill_locations:
+        y = 0
+        if skill.startswith("Craft"):
+            y = skill_locations["Craft"]
+            can.setFont("Helvetica", 8)
+            can.drawString(85, y - (14 * number_of_crafts), extract_sub_skill(skill))
+            number_of_crafts += 1
+        elif skill.startswith("Perform"):
+            y = skill_locations["Perform"]
+            can.setFont("Helvetica", 8)
+            can.drawString(95, y - (14 * number_of_performs), extract_sub_skill(skill))
+            number_of_performs += 1
+        elif skill.startswith("Profession"):
+            y = skill_locations["Profession"]
+            can.setFont("Helvetica", 8)
+            can.drawString(
+                105, y - (14 * number_of_professions), extract_sub_skill(skill)
+            )
+            number_of_professions += 1
+        elif skill in skill_locations:
             y = skill_locations[skill]
+
+        if y > 0:
             if data["class_skill"] == "1":
                 can.drawString(44, y, "x")
             can.setFont("Helvetica", 10)
@@ -1004,6 +1039,94 @@ def to_pdf(filename):
                 can.drawString(378, y, data["misc_bonus"])
             if data["total"] != "0":
                 can.drawString(450, y, data["total"])
+
+    # Feats/Traits Page
+    can.showPage()
+    for i, feat in enumerate(extract_feats(character)):
+        can.setFont("Helvetica", 10)
+        can.drawString(40, 700 - (i * 14.5), feat["name"])
+        can.setFont("Helvetica", 8)
+        can.drawString(165, 700 - (i * 14.5), feat["description"])
+    for i, trait in enumerate(extract_traits(character)):
+        can.setFont("Helvetica", 10)
+        can.drawString(40, 225 - (i * 14.5), trait["name"])
+        can.setFont("Helvetica", 8)
+        can.drawString(165, 225 - (i * 14.5), trait["description"])
+
+    can.setFont("Helvetica", 10)
+    for i, langs in enumerate(partition(extract_languages(character), 8)):
+        can.drawString(40, 104 - (i * 14), ", ".join(langs))
+
+    # Spells Page
+    can.showPage()
+    line = 0
+    spell_data = extract_spells(character)
+    can.setFont("Helvetica", 8)
+    for level in range(0, 10):
+        for spell in spell_data[str(level)]:
+            y = 708 - (line * 15.1)
+            can.drawString(50, y, str(level))
+            can.drawString(80, y, spell["name"])
+            can.drawString(170, y, spell["school"])
+            can.drawString(235, y, summarize_save(spell, spell_data["dc"]))
+            can.drawString(
+                278, y, spell["sr"].split()[0].lower() if spell["sr"] else ""
+            )
+            can.drawString(300, y, process_equation(spell["range"], character_level))
+            duration = process_equation(spell["duration"], character_level)
+            can.setFont("Helvetica", 8 if duration[0] in "0123456789" else 6)
+            can.drawString(345, y, duration)
+            can.setFont("Helvetica", 6)
+            can.drawString(390, y, spell["summary"])
+            line += 1
+
+    # Inventory Page
+    can.showPage()
+
+    can.setFont("Helvetica", 8)
+    number_of_weapons = 0
+    number_of_goods = 0
+    number_of_magic = 0
+    number_of_rings = 0
+    for item in extract_inventory(character):
+        if item["type"] == "Goods and Services":
+            pass
+            # can.drawString(303, 200 - (number_of_goods * 15), item["name"])
+            # can.drawString(476, 196 - (number_of_goods * 15), item["cost"])
+            # can.drawString(520, 196 - (number_of_goods * 15), item["weight"])
+            # number_of_goods += 1
+        elif item["type"] == "Weapon":
+            can.drawString(40, 270 - (number_of_weapons * 15), item["name"])
+            can.drawString(212, 266 - (number_of_weapons * 15), item["cost"])
+            can.drawString(256, 266 - (number_of_weapons * 15), item["weight"])
+            number_of_weapons += 1
+        elif item["type"] == "Wand" or item["type"] == "Potion":
+            can.drawString(303, 270 - (number_of_magic * 15), item["name"])
+            can.drawString(476, 266 - (number_of_magic * 15), item["cost"])
+            can.drawString(520, 266 - (number_of_magic * 15), item["weight"])
+            number_of_magic += 1
+        elif item["slot"]:
+            if item["slot"] == "ring":
+                can.drawString(435, 507 - (number_of_rings * 14), item["name"])
+                number_of_rings += 1
+
+        # print("  {0}".format(item["name"]))
+        # print("    type: {0}".format(item["type"]))
+        # print("    cost: {0}".format(item["cost"]))
+        # print("    weight: {0}".format(item["weight"]))
+        # if item["slot"]:
+        #     print("    slot: {0}".format(item["slot"]))
+
+    # Gear Page
+    can.showPage()
+    line = 0
+    can.setFont("Helvetica", 8)
+    for item in extract_inventory(character):
+        if item["type"] == "Goods and Services":
+            can.drawString(40, 713 - (line * 15), item["name"])
+            can.drawString(212, 713 - (line * 15), item["cost"])
+            can.drawString(256, 713 - (line * 15), item["weight"])
+            line += 1
 
     can.save()
 
@@ -1025,6 +1148,22 @@ def to_pdf(filename):
     skill_page = existing_pdf.getPage(5)
     skill_page.mergePage(new_pdf.getPage(2))
     output.addPage(skill_page)
+
+    feat_page = existing_pdf.getPage(6)
+    feat_page.mergePage(new_pdf.getPage(3))
+    output.addPage(feat_page)
+
+    spell_page = existing_pdf.getPage(8)
+    spell_page.mergePage(new_pdf.getPage(4))
+    output.addPage(spell_page)
+
+    inventory_page = existing_pdf.getPage(9)
+    inventory_page.mergePage(new_pdf.getPage(5))
+    output.addPage(inventory_page)
+
+    gear_page = existing_pdf.getPage(10)
+    gear_page.mergePage(new_pdf.getPage(6))
+    output.addPage(gear_page)
 
     # finally, write "output" to a real file
     outputStream = open("{0}.pdf".format(character_name), "wb")
