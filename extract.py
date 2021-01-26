@@ -1,5 +1,10 @@
 from xml.dom.minidom import parse
 import xml.dom.minidom
+from PyPDF2 import PdfFileWriter, PdfFileReader
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+
 
 ABILITY_NAMES = [
     "strength",
@@ -501,127 +506,6 @@ def extract_spells(character):
 # Process the file
 ################################################################################
 
-dom_tree = xml.dom.minidom.parse("Simone_with_personal.xml")
-character = dom_tree.documentElement.getElementsByTagName("character")[0]
-
-print("Name: {0}".format(extract_name(character)))
-
-character_level = extract_level(character)
-print("Level: {0}".format(character_level))
-
-print("Class Level: {0}".format(extract_class_level(character)))
-
-print("Race: {0}".format(extract_race(character)))
-
-print("Initiative:")
-init_data = extract_initiative(character)
-for init_name in INIT_TYPES:
-    print("  {0}: {1}".format(init_name.capitalize(), init_data[init_name]))
-
-print("HP:")
-hp_data = extract_hp(character)
-for hp_name in HP_TYPES:
-    print("  {0}: {1}".format(hp_name.capitalize(), hp_data[hp_name]))
-
-print("Alignment: {0}".format(extract_alignment(character)))
-
-print("Size: {0}".format(extract_size(character)))
-
-print("Age: {0}".format(extract_age(character)))
-
-print("Appearance: {0}".format(extract_appearance(character)))
-
-print("Speed:")
-speed_data = extract_speed(character)
-for name, value in speed_data.items():
-    print("  {0}: {1}".format(name.capitalize(), value))
-
-print("Abilities:")
-abilities = extract_abilities(character)
-for name in ABILITY_NAMES:
-    print(
-        "  {0}: {1} bonus: {2}".format(
-            name.capitalize(), abilities[name][0], abilities[name][1]
-        )
-    )
-
-ac_data = extract_ac(character)
-print("AC Totals:")
-for ac_name in AC_TYPES:
-    print("  {0}: {1}".format(ac_name.capitalize(), ac_data["totals"][ac_name]))
-print("AC Sources:")
-for ac_name in AC_SOURCES:
-    print("  {0}: {1}".format(ac_name.capitalize(), ac_data["sources"][ac_name]))
-
-
-print("Languages:")
-for l in extract_languages(character):
-    print("  {0}".format(l))
-
-print("Proficiencies:")
-for l in extract_proficiencies(character):
-    print("  {0}".format(l))
-
-print("Saves:")
-saves = extract_saves(character)
-for save_name in SAVE_NAMES:
-    print("  {0}".format(save_name.capitalize()))
-    for name, value in saves[save_name].items():
-        print("    {0}: {1}".format(name.capitalize(), value))
-
-attack_bonuses = extract_attack_bonuses(character)
-print("Attack Bonuses:")
-for bonus_name, bonus_data in attack_bonuses.items():
-    if bonus_name == "base":
-        print("  Base: {0}".format(bonus_data))
-    else:
-        print("  {0}".format(bonus_name.capitalize()))
-        for name, value in bonus_data.items():
-            print("    {0}: {1}".format(name.capitalize(), value))
-
-
-defenses = extract_defenses(character)
-print("Defenses:")
-for defense_name, defense_data in defenses.items():
-    print("  {0}".format(defense_name.capitalize()))
-    for name, value in defense_data.items():
-        print("    {0}: {1}".format(name.capitalize(), value))
-
-print("Encumbrance:")
-encumbrance_data = extract_encumbrance(character)
-for name, value in encumbrance_data.items():
-    print("  {0}: {1}".format(name.capitalize(), value))
-
-print("Feats:")
-feat_data = extract_feats(character)
-for feat in feat_data:
-    print("  {0} - {1}".format(feat["name"], feat["description"]))
-
-print("Traits:")
-trait_data = extract_traits(character)
-for trait in trait_data:
-    print("  {0} - {1}".format(trait["name"], trait["description"]))
-
-print("Skills:")
-skill_data = extract_skills(character)
-for skill, data in skill_data.items():
-    print("  {0}".format(skill))
-    for name, value in data.items():
-        print("    {0}: {1}".format(name, value))
-
-print("Inventory:")
-for item in extract_inventory(character):
-    print("  {0}".format(item["name"]))
-    print("    type: {0}".format(item["type"]))
-    print("    cost: {0}".format(item["cost"]))
-    print("    weight: {0}".format(item["weight"]))
-    if item["slot"]:
-        print("    slot: {0}".format(item["slot"]))
-
-print("Special Abilities:")
-for ability in extract_special_abilities(character):
-    print("  {0}".format(ability))
-
 
 def summarize_save(spell, dc):
     if spell["save"] is None:
@@ -740,21 +624,359 @@ def process_equation(duration, lvl):
         return str("{0} {1}".format(value, pluralize(unit, value)))
 
 
-print("Spells:")
-spell_data = extract_spells(character)
-for level in range(0, 10):
-    print("  Level {0}".format(level))
-    for spell in spell_data[str(level)]:
-        print("    {0}".format(spell["name"]))
-        print("      School: {0}".format(spell["school"]))
-        print("      Save: {0}".format(summarize_save(spell, spell_data["dc"])))
-        print("      SR?: {0}".format(spell["sr"].lower() if spell["sr"] else ""))
+def damage_sign_of(value):
+    if value < 0:
+        return "-"
+    elif value > 0:
+        return "+"
+    else:
+        return ""
+
+
+def abs_value_of(value):
+    if value == 0:
+        return ""
+    else:
+        return abs(value)
+
+
+def dump(character_file):
+    dom_tree = xml.dom.minidom.parse(character_file)
+    character = dom_tree.documentElement.getElementsByTagName("character")[0]
+
+    print("Name: {0}".format(extract_name(character)))
+
+    character_level = extract_level(character)
+    print("Level: {0}".format(character_level))
+
+    print("Classes:")
+    for char_class in extract_classes(character):
+        print("  {0} {1}".format(char_class["name"], char_class["level"]))
+
+    print("Race: {0}".format(extract_race(character)))
+
+    print("Initiative:")
+    init_data = extract_initiative(character)
+    for init_name in INIT_TYPES:
+        print("  {0}: {1}".format(init_name.capitalize(), init_data[init_name]))
+
+    print("HP:")
+    hp_data = extract_hp(character)
+    for hp_name in HP_TYPES:
+        print("  {0}: {1}".format(hp_name.capitalize(), hp_data[hp_name]))
+
+    print("Alignment: {0}".format(extract_alignment(character)))
+
+    print("Deity: {0}".format(extract_deity(character)))
+
+    print("Size: {0}".format(extract_size(character)))
+
+    print("Age: {0}".format(extract_age(character)))
+
+    print("Appearance: {0}".format(extract_appearance(character)))
+
+    print("Gender: {0}".format(extract_gender(character)))
+
+    print("Height: {0}".format(extract_height(character)))
+
+    print("Weight: {0}".format(extract_weight(character)))
+
+    print("Speed:")
+    speed_data = extract_speed(character)
+    for name, value in speed_data.items():
+        print("  {0}: {1}".format(name.capitalize(), value))
+
+    print("Abilities:")
+    abilities = extract_abilities(character)
+    for name in ABILITY_NAMES:
         print(
-            "      Range: {0}".format(process_equation(spell["range"], character_level))
-        )
-        print(
-            "      Duration: {0}".format(
-                process_equation(spell["duration"], character_level)
+            "  {0}: {1} bonus: {2}".format(
+                name.capitalize(), abilities[name][0], abilities[name][1]
             )
         )
-        print("      Summary: {0}".format(spell["summary"]))
+
+    ac_data = extract_ac(character)
+    print("AC Totals:")
+    for ac_name in AC_TYPES:
+        print("  {0}: {1}".format(ac_name.capitalize(), ac_data["totals"][ac_name]))
+    print("AC Sources:")
+    for ac_name in AC_SOURCES:
+        print("  {0}: {1}".format(ac_name.capitalize(), ac_data["sources"][ac_name]))
+
+    print("Languages:")
+    for l in extract_languages(character):
+        print("  {0}".format(l))
+
+    print("Proficiencies:")
+    for l in extract_proficiencies(character):
+        print("  {0}".format(l))
+
+    print("Saves:")
+    saves = extract_saves(character)
+    for save_name in SAVE_NAMES:
+        print("  {0}".format(save_name.capitalize()))
+        for name, value in saves[save_name].items():
+            print("    {0}: {1}".format(name.capitalize(), value))
+
+    attack_bonuses = extract_attack_bonuses(character)
+    print("Attack Bonuses:")
+    for bonus_name, bonus_data in attack_bonuses.items():
+        if bonus_name == "base":
+            print("  Base: {0}".format(bonus_data))
+        else:
+            print("  {0}".format(bonus_name.capitalize()))
+            for name, value in bonus_data.items():
+                print("    {0}: {1}".format(name.capitalize(), value))
+
+    defenses = extract_defenses(character)
+    print("Defenses:")
+    for defense_name, defense_data in defenses.items():
+        print("  {0}".format(defense_name.capitalize()))
+        for name, value in defense_data.items():
+            print("    {0}: {1}".format(name.capitalize(), value))
+
+    print("Encumbrance:")
+    encumbrance_data = extract_encumbrance(character)
+    for name, value in encumbrance_data.items():
+        print("  {0}: {1}".format(name.capitalize(), value))
+
+    print("Feats:")
+    feat_data = extract_feats(character)
+    for feat in feat_data:
+        print("  {0} - {1}".format(feat["name"], feat["description"]))
+
+    print("Traits:")
+    trait_data = extract_traits(character)
+    for trait in trait_data:
+        print("  {0} - {1}".format(trait["name"], trait["description"]))
+
+    print("Skills:")
+    skill_data = extract_skills(character)
+    for skill, data in skill_data.items():
+        print("  {0}".format(skill))
+        for name, value in data.items():
+            print("    {0}: {1}".format(name, value))
+
+    print("Inventory:")
+    for item in extract_inventory(character):
+        print("  {0}".format(item["name"]))
+        print("    type: {0}".format(item["type"]))
+        print("    cost: {0}".format(item["cost"]))
+        print("    weight: {0}".format(item["weight"]))
+        if item["slot"]:
+            print("    slot: {0}".format(item["slot"]))
+
+    print("Special Abilities:")
+    for ability in extract_special_abilities(character):
+        print("  {0}".format(ability))
+
+    print("Spells:")
+    spell_data = extract_spells(character)
+    for level in range(0, 10):
+        print("  Level {0}".format(level))
+        for spell in spell_data[str(level)]:
+            print("    {0}".format(spell["name"]))
+            print("      School: {0}".format(spell["school"]))
+            print("      Save: {0}".format(summarize_save(spell, spell_data["dc"])))
+            print("      SR?: {0}".format(spell["sr"].lower() if spell["sr"] else ""))
+            print(
+                "      Range: {0}".format(
+                    process_equation(spell["range"], character_level)
+                )
+            )
+            print(
+                "      Duration: {0}".format(
+                    process_equation(spell["duration"], character_level)
+                )
+            )
+            print("      Summary: {0}".format(spell["summary"]))
+
+    print("Weapons:")
+    for weapon in extract_weapons(character):
+        print("  {0}".format(weapon["name"]))
+        print("    Attack Bonus: {0}".format(weapon["attack_bonus"]))
+        damage_bonus = int(weapon["damage_bonus"])
+        print(
+            "    Damage: {0}{1}{2}".format(
+                weapon["damage_dice"],
+                damage_sign_of(damage_bonus),
+                abs_value_of(damage_bonus),
+            )
+        )
+        print("    Crit Range: {0}".format(weapon["crit_attack_range"]))
+        print("    Crit Multipler: {0}".format(weapon["crit_multiplier"]))
+        print("    Type: {0}".format(weapon["damage_type"]))
+        if weapon["range"]:
+            print("    Range: {0}".format(weapon["range"]))
+        if weapon["ammo"]:
+            print("    Ammo: {0}".format(weapon["ammo"]))
+
+
+# dump("Simone_with_personal.xml")
+
+
+def to_pdf(filename):
+    dom_tree = xml.dom.minidom.parse(filename)
+    character = dom_tree.documentElement.getElementsByTagName("character")[0]
+
+    character_name = extract_name(character)
+
+    # Character page
+    packet = io.BytesIO()
+
+    # create a new PDF with Reportlab
+    can = canvas.Canvas(packet, pagesize=letter)
+
+    # Character page
+
+    # basic
+    can.drawString(50, 698, character_name)
+    can.setFontSize(size=10)
+    can.drawString(175, 676, extract_race(character))
+    can.drawString(50, 655, extract_alignment(character))
+    can.drawString(175, 655, extract_deity(character))
+
+    # Initiative
+    initiative = extract_initiative(character)
+    can.drawString(315, 703, initiative["abilitymod"])
+    if initiative["misc"] != "0":
+        can.drawString(450, 703, initiative["misc"])
+    can.drawString(540, 715, initiative["total"])
+
+    # Classes
+    for i, cl in enumerate(extract_classes(character)):
+        can.drawString(50, 615 - (i * 15), cl["name"])
+        can.drawString(275, 615 - (i * 15), cl["level"])
+
+    # Speeds
+    can.drawString(395, 644, extract_speed(character)["total"])
+
+    # Ability Scores
+    count = 0
+    for name, ability in extract_abilities(character).items():
+        can.setFont("Helvetica-Bold", 18)
+        if len(ability[0]) == 1:
+            can.drawString(225, 508 - (count * 35), ability[0])
+        else:
+            can.drawString(220, 508 - (count * 35), ability[0])
+        can.setFont("Helvetica", 10)
+        can.drawString(260, 512 - (count * 35), ability[1])
+        count += 1
+
+    # Armor Class
+    ac = extract_ac(character)
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(357, 293, ac["totals"]["general"])
+    can.setFont("Helvetica", 10)
+    can.drawString(225, 283, ac["totals"]["flatfooted"])
+    can.drawString(270, 283, ac["totals"]["touch"])
+    can.drawString(315, 283, ac["totals"]["cmd"])
+
+    # HP
+    hp = extract_hp(character)
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(535, 293, hp["total"])
+
+    # Saves
+    saves = extract_saves(character)
+    can.setFont("Helvetica-Bold", 18)
+    for i, save_name in enumerate(SAVE_NAMES):
+        value = saves[save_name]["total"]
+        if len(value) == 1:
+            can.drawString(363, 162 - (i * 39), value)
+        else:
+            can.drawString(358, 162 - (i * 39), value)
+
+    # Offense Page
+    can.showPage()
+
+    ab = extract_attack_bonuses(character)
+
+    # Attack bonuses
+
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(510, 695, ab["base"])
+
+    can.setFont("Helvetica", 10)
+    can.drawString(215, 662, ab["base"])
+    can.drawString(262, 662, ab["melee"]["abilitymod"])
+    can.drawString(310, 662, ab["melee"]["size"])
+    can.drawString(360, 662, ab["melee"]["misc"])
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(410, 660, ab["melee"]["total"])
+
+    can.setFont("Helvetica", 10)
+    can.drawString(215, 620, ab["base"])
+    can.drawString(262, 620, ab["ranged"]["abilitymod"])
+    can.drawString(310, 620, ab["ranged"]["size"])
+    can.drawString(360, 620, ab["ranged"]["misc"])
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(410, 619, ab["ranged"]["total"])
+
+    can.setFont("Helvetica", 10)
+    can.drawString(215, 580, ab["base"])
+    can.drawString(262, 580, ab["grapple"]["abilitymod"])
+    can.drawString(310, 580, ab["grapple"]["size"])
+    can.drawString(360, 580, ab["grapple"]["misc"])
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(410, 578, ab["grapple"]["total"])
+
+    can.setFont("Helvetica", 10)
+
+    # Attacks
+
+    count = 0
+    for weapon in extract_weapons(character):
+        can.drawString(40, 510 - (count * 53.5), weapon["name"])
+        can.drawString(180, 505 - (count * 53.5), weapon["attack_bonus"])
+        can.drawString(260, 505 - (count * 53.5), weapon["damage_dice"])
+        can.drawString(350, 505 - (count * 53.5), weapon["crit_attack_range"])
+        can.drawString(395, 505 - (count * 53.5), weapon["crit_multiplier"])
+        can.drawString(438, 505 - (count * 53.5), weapon["damage_type"])
+        if weapon["range"]:
+            can.drawString(480, 505 - (count * 53.5), weapon["range"])
+        if weapon["ammo"]:
+            can.drawString(525, 505 - (count * 53.5), weapon["ammo"])
+
+        # print("    Attack Bonus: {0}".format(weapon["attack_bonus"]))
+        # damage_bonus = int(weapon["damage_bonus"])
+        # print(
+        #     "    Damage: {0}{1}{2}".format(
+        #         weapon["damage_dice"],
+        #         damage_sign_of(damage_bonus),
+        #         abs_value_of(damage_bonus),
+        #     )
+        # )
+        # print("    Crit Range: {0}".format(weapon["crit_attack_range"]))
+        # print("    Crit Multipler: {0}".format(weapon["crit_multiplier"]))
+        # print("    Type: {0}".format(weapon["damage_type"]))
+        # if weapon["range"]:
+        #     print("    Range: {0}".format(weapon["range"]))
+        # if weapon["ammo"]:
+        #     print("    Ammo: {0}".format(weapon["ammo"]))
+        count += 1
+
+    can.save()
+
+    # move to the beginning of the StringIO buffer
+    packet.seek(0)
+    new_pdf = PdfFileReader(packet)
+    # read your existing PDF
+    existing_pdf = PdfFileReader(open("Player_Character_Folio.pdf", "rb"))
+    output = PdfFileWriter()
+
+    character_page = existing_pdf.getPage(2)
+    character_page.mergePage(new_pdf.getPage(0))
+    output.addPage(character_page)
+
+    offense_page = existing_pdf.getPage(4)
+    offense_page.mergePage(new_pdf.getPage(1))
+    output.addPage(offense_page)
+
+    # finally, write "output" to a real file
+    outputStream = open("{0}.pdf".format(character_name), "wb")
+    output.write(outputStream)
+    outputStream.close()
+
+
+to_pdf("Simone_with_personal.xml")
