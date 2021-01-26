@@ -1576,22 +1576,24 @@
 			<id-00002>
 				<attack1 type="number">5</attack1>
 				<attack1modifier type="number">0</attack1modifier>
-				<attack2 type="number">0</attack2>
-				<attack2modifier type="number">0</attack2modifier>
+				<attack2 type="number">2</attack2>
+				<attack2modifier type="number">2</attack2modifier>
 				<attack3 type="number">-5</attack3>
 				<attack3modifier type="number">0</attack3modifier>
 				<attack4 type="number">-10</attack4>
 				<attack4modifier type="number">0</attack4modifier>
-				<attacks type="number">1</attacks>
+				<attacks type="number">2</attacks>
 				<bonus type="number">1</bonus>
 				<carried type="number">2</carried>
 				<critatkrange type="number">18</critatkrange>
 				<damagelist>
 					<id-00001>
-						<bonus type="number">0</bonus>
+						<bonus type="number">2</bonus>
 						<critmult type="number">2</critmult>
-						<dice type="dice">d6</dice>
+						<dice type="dice">2d6</dice>
 						<stat type="string">strength</stat>
+						<statmax type="number">0</statmax>
+						<statmult type="number">1</statmult>
 						<type type="string">piercing</type>
 					</id-00001>
 				</damagelist>
@@ -1673,6 +1675,7 @@
 				<type type="number">1</type>
 			</id-00004>
 			<id-00005>
+				<ammo type="number">2</ammo>
 				<attack1 type="number">7</attack1>
 				<attack1modifier type="number">0</attack1modifier>
 				<attack2 type="number">2</attack2>
@@ -1690,6 +1693,8 @@
 						<bonus type="number">0</bonus>
 						<critmult type="number">3</critmult>
 						<dice type="dice">d6</dice>
+						<statmax type="number">0</statmax>
+						<statmult type="number">1</statmult>
 						<type type="string">piercing</type>
 					</id-00001>
 				</damagelist>
