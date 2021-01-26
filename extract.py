@@ -345,6 +345,9 @@ def extract_skills(character):
             else "{0} ({1})".format(base_skill_name, sub_skill_name)
         )
         skills[skill_name] = {
+            "armorcheckmultiplier": extract_text(
+                find_first_child_named(skill_element, "armorcheckmultiplier")
+            ),
             "ranks": extract_text(find_first_child_named(skill_element, "ranks")),
             "ability_mod": extract_text(find_first_child_named(skill_element, "stat")),
             "misc_bonus": extract_text(find_first_child_named(skill_element, "misc")),
@@ -392,12 +395,17 @@ def extract_weapons(character):
         )
 
         bonus_string = ""
-        for bonus in range(1, int(weapon["attacks"]) + 1):
-            if bonus > 1:
-                bonus_string += "/"
-            bonus_string += extract_text(
-                find_first_child_named(weapon_element, "attack" + str(bonus))
-            )
+        if weapon["attacks"] == "1" and not extract_text(
+            find_first_child_named(weapon_element, "attack1")
+        ):
+            bonus_string = extract_text(find_first_child_named(weapon_element, "bonus"))
+        else:
+            for bonus in range(1, int(weapon["attacks"]) + 1):
+                if bonus > 1:
+                    bonus_string += "/"
+                bonus_string += extract_text(
+                    find_first_child_named(weapon_element, "attack" + str(bonus))
+                )
         weapon["attack_bonus"] = bonus_string
         weapon["crit_attack_range"] = extract_text(
             find_first_child_named(weapon_element, "critatkrange")
@@ -1006,18 +1014,20 @@ def to_pdf(filename):
     number_of_professions = 0
     skill_data = extract_skills(character)
     for skill, data in skill_data.items():
+        can.setFont("Helvetica", 10)
+
         y = 0
-        if skill.startswith("Craft"):
+        if skill.startswith("Craft") and data["total"] != "0":
             y = skill_locations["Craft"]
             can.setFont("Helvetica", 8)
             can.drawString(85, y - (14 * number_of_crafts), extract_sub_skill(skill))
             number_of_crafts += 1
-        elif skill.startswith("Perform"):
+        elif skill.startswith("Perform") and data["total"] != "0":
             y = skill_locations["Perform"]
             can.setFont("Helvetica", 8)
             can.drawString(95, y - (14 * number_of_performs), extract_sub_skill(skill))
             number_of_performs += 1
-        elif skill.startswith("Profession"):
+        elif skill.startswith("Profession") and data["total"] != "0":
             y = skill_locations["Profession"]
             can.setFont("Helvetica", 8)
             can.drawString(
@@ -1037,8 +1047,16 @@ def to_pdf(filename):
                 can.drawString(235, y, data["ability_mod"])
             if data["misc_bonus"] != "0":
                 can.drawString(378, y, data["misc_bonus"])
+            if data["armorcheckmultiplier"] != "0":
+                can.drawString(412, y, "*")
             if data["total"] != "0":
-                can.drawString(450, y, data["total"])
+                can.setFont("Helvetica-Bold", 12)
+                if len(data["total"]) == 1:
+                    can.drawString(457, y, data["total"])
+                elif data["total"][0] == "-":
+                    can.drawString(453, y, data["total"])
+                else:
+                    can.drawString(450, y, data["total"])
 
     # Feats/Traits Page
     can.showPage()
@@ -1086,9 +1104,20 @@ def to_pdf(filename):
 
     can.setFont("Helvetica", 8)
     number_of_weapons = 0
+    number_of_armors = 0
     number_of_goods = 0
     number_of_magic = 0
     number_of_rings = 0
+    number_of_wrists = 0
+    number_of_heads = 0
+    number_of_necks = 0
+    number_of_hands = 0
+    number_of_belts = 0
+    number_of_eyes = 0
+    number_of_headbands = 0
+    number_of_feet = 0
+    number_of_shoulders = 0
+    number_of_others = 0
     for item in extract_inventory(character):
         if item["type"] == "Goods and Services":
             pass
@@ -1098,36 +1127,93 @@ def to_pdf(filename):
             # number_of_goods += 1
         elif item["type"] == "Weapon":
             can.drawString(40, 270 - (number_of_weapons * 15), item["name"])
-            can.drawString(212, 266 - (number_of_weapons * 15), item["cost"])
-            can.drawString(256, 266 - (number_of_weapons * 15), item["weight"])
+            can.drawString(212, 267 - (number_of_weapons * 15), item["cost"])
+            can.drawString(256, 267 - (number_of_weapons * 15), item["weight"])
             number_of_weapons += 1
-        elif item["type"] == "Wand" or item["type"] == "Potion":
+        elif item["type"] == "Armor":
+            can.drawString(40, 151 - (number_of_armors * 15), item["name"])
+            can.drawString(212, 148 - (number_of_armors * 15), item["cost"])
+            can.drawString(256, 148 - (number_of_armors * 15), item["weight"])
+            number_of_armors += 1
+        elif (
+            item["type"] == "Wand"
+            or item["type"] == "Potion"
+            or item["type"] == "Scroll"
+        ):
             can.drawString(303, 270 - (number_of_magic * 15), item["name"])
-            can.drawString(476, 266 - (number_of_magic * 15), item["cost"])
-            can.drawString(520, 266 - (number_of_magic * 15), item["weight"])
+            can.drawString(476, 267 - (number_of_magic * 15), item["cost"])
+            can.drawString(520, 267 - (number_of_magic * 15), item["weight"])
             number_of_magic += 1
         elif item["slot"]:
             if item["slot"] == "ring":
                 can.drawString(435, 507 - (number_of_rings * 14), item["name"])
                 number_of_rings += 1
-
-        # print("  {0}".format(item["name"]))
-        # print("    type: {0}".format(item["type"]))
-        # print("    cost: {0}".format(item["cost"]))
-        # print("    weight: {0}".format(item["weight"]))
-        # if item["slot"]:
-        #     print("    slot: {0}".format(item["slot"]))
+            elif item["slot"] == "wrists":
+                can.drawString(40, 507 - (number_of_wrists * 14), item["name"])
+                number_of_wrists += 1
+            elif item["slot"] == "head":
+                can.drawString(40, 710 - (number_of_heads * 14), item["name"])
+                number_of_heads += 1
+            elif item["slot"] == "neck":
+                can.drawString(40, 643 - (number_of_necks * 14), item["name"])
+                number_of_necks += 1
+            elif item["slot"] == "hands":
+                can.drawString(40, 439 - (number_of_hands * 14), item["name"])
+                number_of_hands += 1
+            elif item["slot"] == "belt":
+                can.drawString(435, 371 - (number_of_belts * 14), item["name"])
+                number_of_belts += 1
+            elif item["slot"] == "eyes":
+                can.drawString(435, 643 - (number_of_eyes * 14), item["name"])
+                number_of_eyes += 1
+            elif item["slot"] == "headband":
+                can.drawString(435, 710 - (number_of_headbands * 14), item["name"])
+                number_of_headbands += 1
+            elif item["slot"] == "feet":
+                can.drawString(40, 371 - (number_of_feet * 14), item["name"])
+                number_of_feet += 1
+            elif item["slot"] == "shoulders":
+                can.drawString(435, 575 - (number_of_shoulders * 14), item["name"])
+                number_of_shoulders += 1
+        else:
+            can.drawString(303, 151 - (number_of_others * 15), item["name"])
+            if item["cost"]:
+                can.drawString(476, 148 - (number_of_others * 15), item["cost"])
+            if item["weight"]:
+                can.drawString(520, 148 - (number_of_others * 15), item["weight"])
+            number_of_others += 1
 
     # Gear Page
     can.showPage()
     line = 0
     can.setFont("Helvetica", 8)
-    for item in extract_inventory(character):
-        if item["type"] == "Goods and Services":
-            can.drawString(40, 713 - (line * 15), item["name"])
-            can.drawString(212, 713 - (line * 15), item["cost"])
-            can.drawString(256, 713 - (line * 15), item["weight"])
-            line += 1
+    for item in sorted(
+        sorted(extract_inventory(character), key=lambda i: i["name"]),
+        key=lambda i: i["type"],
+    ):
+        can.drawString(40, 714 - (line * 15.1), item["name"])
+        if item["cost"]:
+            can.drawString(212, 714 - (line * 15.1), item["cost"])
+        if item["weight"]:
+            can.drawString(256, 714 - (line * 15.1), item["weight"])
+        line += 1
+
+    encumbrance = extract_encumbrance(character)
+    can.drawString(40, 92, encumbrance["lightload"])
+    can.drawString(126, 92, encumbrance["mediumload"])
+    can.drawString(214, 92, encumbrance["heavyload"])
+    can.drawString(40, 73, encumbrance["liftoverhead"])
+    can.drawString(126, 73, encumbrance["liftoffground"])
+    can.drawString(214, 73, encumbrance["pushordrag"])
+
+    # # First background Page
+    # can.showPage()
+    # can.setFont("Helvetica", 8)
+
+    # can.drawString(60, 717, extract_age(character))
+    # can.drawString(157, 717, extract_height(character))
+    # can.drawString(247, 717, extract_weight(character))
+    # can.drawString(73, 700, extract_gender(character))
 
     can.save()
 
@@ -1165,6 +1251,10 @@ def to_pdf(filename):
     gear_page = existing_pdf.getPage(10)
     gear_page.mergePage(new_pdf.getPage(6))
     output.addPage(gear_page)
+
+    # background1_page = existing_pdf.getPage(13)
+    # background1_page.mergePage(new_pdf.getPage(7))
+    # output.addPage(background1_page)
 
     # finally, write "output" to a real file
     outputStream = open("{0}.pdf".format(character_name), "wb")
