@@ -43,7 +43,7 @@
 			<sources>
 				<abilitymod type="number">2</abilitymod>
 				<abilitymod2 type="number">0</abilitymod2>
-				<armor type="number">3</armor>
+				<armor type="number">10</armor>
 				<cmdabilitymod type="number">-1</cmdabilitymod>
 				<cmdbasemod type="number">4</cmdbasemod>
 				<cmdmisc type="number">0</cmdmisc>
@@ -52,15 +52,15 @@
 				<ffmisc type="number">0</ffmisc>
 				<misc type="number">0</misc>
 				<naturalarmor type="number">0</naturalarmor>
-				<shield type="number">0</shield>
+				<shield type="number">1</shield>
 				<size type="number">1</size>
 				<temporary type="number">0</temporary>
 				<touchmisc type="number">0</touchmisc>
 			</sources>
 			<totals>
 				<cmd type="number">14</cmd>
-				<flatfooted type="number">14</flatfooted>
-				<general type="number">16</general>
+				<flatfooted type="number">22</flatfooted>
+				<general type="number">24</general>
 				<touch type="number">13</touch>
 			</totals>
 		</ac>
@@ -108,15 +108,19 @@
 		<coins>
 			<slot1>
 				<amount type="number">0</amount>
+				<name type="string">CP</name>
 			</slot1>
 			<slot2>
-				<amount type="number">0</amount>
+				<amount type="number">12</amount>
+				<name type="string">GP</name>
 			</slot2>
 			<slot3>
 				<amount type="number">0</amount>
+				<name type="string">SP</name>
 			</slot3>
 			<slot4>
 				<amount type="number">0</amount>
+				<name type="string">PP</name>
 			</slot4>
 			<slot5>
 				<amount type="number">0</amount>
@@ -135,17 +139,17 @@
 		</defenses>
 		<deity type="string">Desna</deity>
 		<encumbrance>
-			<armorcheckpenalty type="number">-1</armorcheckpenalty>
-			<armormaxstatbonus type="number">5</armormaxstatbonus>
+			<armorcheckpenalty type="number">-5</armorcheckpenalty>
+			<armormaxstatbonus type="number">3</armormaxstatbonus>
 			<armormaxstatbonusactive type="number">1</armormaxstatbonusactive>
 			<heavyload type="number">60</heavyload>
 			<liftoffground type="number">120</liftoffground>
 			<liftoverhead type="number">60</liftoverhead>
 			<lightload type="number">19.5</lightload>
-			<load type="number">51</load>
+			<load type="number">180</load>
 			<mediumload type="number">39.75</mediumload>
 			<pushordrag type="number">300</pushordrag>
-			<spellfailure type="number">15</spellfailure>
+			<spellfailure type="number">45</spellfailure>
 		</encumbrance>
 		<exp type="number">0</exp>
 		<expneeded type="number">0</expneeded>
@@ -297,7 +301,7 @@
 				<checkpenalty type="number">0</checkpenalty>
 				<cl type="number">0</cl>
 				<cost type="string">320 gp</cost>
-				<count type="number">1</count>
+				<count type="number">2</count>
 				<critical type="string">18-20/x2</critical>
 				<damage type="string">1d6</damage>
 				<damagetype type="string">Piercing</damagetype>
@@ -582,6 +586,571 @@
 				<type type="string">Potion</type>
 				<weight type="number">0</weight>
 			</id-00016>
+			<id-00017>
+				<ac type="number">4</ac>
+				<aura type="string">Faint abjuration</aura>
+				<bonus type="number">1</bonus>
+				<carried type="number">1</carried>
+				<checkpenalty type="number">-1</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">1,250 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>Covering the torso, this shirt is made up of thousands of interlocking metal rings.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">4</maxstatbonus>
+				<name type="string">+1 Chain shirt</name>
+				<nonid_name type="string">Magical Chain shirt</nonid_name>
+				<properties type="string">magic</properties>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">20</speed20>
+				<speed30 type="number">30</speed30>
+				<spellfailure type="number">20</spellfailure>
+				<subtype type="string">Light</subtype>
+				<type type="string">Armor</type>
+				<weight type="number">25</weight>
+			</id-00017>
+			<id-00018>
+				<ac type="number">0</ac>
+				<aura type="string">Faint conjuration</aura>
+				<bonus type="number">0</bonus>
+				<carried type="number">1</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">3</cl>
+				<cost type="string">300 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>A potion is a magic liquid that produces its effect when imbibed. A potion can be used only once.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Potion (Cure Moderate Wounds)</name>
+				<nonid_name type="string">Magical Potion</nonid_name>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<type type="string">Potion</type>
+				<weight type="number">0</weight>
+			</id-00018>
+			<id-00019>
+				<carried type="number">1</carried>
+				<cost type="string">1 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>A crossbow bolt used as a melee weapon is treated as a light improvised weapon (-4 penalty on attack rolls) and deals damage as a dagger of its size (crit &#215;2).</p>
+					<p>Bolts come in a wooden case that holds 10 bolts (or 5, for a repeating crossbow).</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Bolts, crossbow (10)</name>
+				<showonminisheet type="number">1</showonminisheet>
+				<subtype type="string">Ammunition</subtype>
+				<type type="string">Goods and Services</type>
+				<weight type="number">1</weight>
+			</id-00019>
+			<id-00020>
+				<ac type="number">1</ac>
+				<bonus type="number">0</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">-1</checkpenalty>
+				<cl type="number">0</cl>
+				<cost type="string">9 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>You strap a shield to your forearm and grip it with your hand. A light shield's weight lets you carry other items in that hand, although you cannot use weapons with it.</p>
+					<p>
+						<i>Wooden or Steel </i>Wooden and steel shields offer the same basic protection, though they respond differently to some spells and effects.</p>
+					<p>
+						<i>Shield Bash Attacks </i>You can bash an opponent with a light shield, using it as an off-hand weapon. See &#34;shield, light&#34; in Weapons section for the damage dealt by a shield bash. Used this way, a light shield is a martial bludgeoning weapon. For the purpose of penalties on attack rolls, treat a light shield as a light weapon. If you use your shield as a weapon, you lose its AC bonus until your next turn. An enhancement bonus on a shield does not improve the effectiveness of a shield bash made with it, but the shield can be made into a magic weapon in its own right.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Shield, light steel</name>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">5</spellfailure>
+				<subtype type="string">Shield</subtype>
+				<type type="string">Armor</type>
+				<weight type="number">6</weight>
+			</id-00020>
+			<id-00021>
+				<ac type="number">0</ac>
+				<bonus type="number">0</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">0</cl>
+				<cost type="string">400 gp</cost>
+				<count type="number">1</count>
+				<critical type="string">19-20/x2</critical>
+				<damage type="string">1d4</damage>
+				<damagetype type="string">Piercing</damagetype>
+				<description type="formattedtext">
+					<p>You can draw a hand crossbow back by hand. Loading a hand crossbow is a move action that provokes attacks of opportunity.</p>
+					<p>You can shoot, but not load, a hand crossbow with one hand at no penalty. You can shoot a hand crossbow with each hand, but you take a penalty on attack rolls as if attacking with two light weapons</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Mwk Crossbow, hand</name>
+				<properties type="string">masterwork</properties>
+				<range type="number">30</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<subtype type="string">Exotic Ranged</subtype>
+				<type type="string">Weapon</type>
+				<weight type="number">2</weight>
+			</id-00021>
+			<id-00022>
+				<ac type="number">0</ac>
+				<aura type="string">Moderate abjuration</aura>
+				<bonus type="number">0</bonus>
+				<carried type="number">1</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">7</cl>
+				<cost type="string">900 gp</cost>
+				<count type="number">3</count>
+				<description type="formattedtext">
+					<linklist>
+						<link class="imagewindow" recordname="image.id-00160@Curse of the Crimson Throne, Intro and Appendix">
+							<b>Image: </b>Shoanti War Paint</link>
+					</linklist>
+					<p>The Shoanti have developed numerous types of magical war paint, each providing a specific benefit to aid their hunters, warriors, and heroes in a variety of tasks. Shoanti war paint can be applied to any visible part of the body - typically the face, shoulders, legs, or arms. Applying a dose of war paint is a full-round action that provokes an attack of opportunity. Shoanti war paint does not take up a magic item slot, but you can benefit from only one color of Shoanti war paint at a time and applying a dose of a different color replaces the effects of the previous application. Once Shoanti war paint is applied, its effects last for 24 hours.</p>
+					<p>
+						<b>Orange: </b>The wearer gains damage reduction 1/-. This effect stacks with damage reduction gained via a character class, such as barbarian.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Shoanti War Paint (Orange)</name>
+				<nonid_name type="string">Magical Paint</nonid_name>
+				<prerequisites type="string">Cost 450 gp; Craft Wondrous Item; stoneskin</prerequisites>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<type type="string">Wondrous Item</type>
+				<weight type="number">0</weight>
+			</id-00022>
+			<id-00023>
+				<aura type="string">Faint transmutation</aura>
+				<carried type="number">1</carried>
+				<cl type="number">5</cl>
+				<cost type="string">2,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>This amulet, usually crafted from bone or beast scales, toughens the wearer's body and flesh, giving him an enhancement bonus to his natural armor bonus of from +1 to +5, depending on the kind of amulet.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Amulet of Natural Armor +1</name>
+				<nonid_name type="string">Magical Amulet</nonid_name>
+				<prerequisites type="string">Craft Wondrous Item, barkskin, creator's caster level must be at least three times the amulet's bonus</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<type type="string">Wondrous Item</type>
+				<weight type="number">0</weight>
+			</id-00023>
+			<id-00024>
+				<ac type="number">4</ac>
+				<aura type="string">Faint abjuration</aura>
+				<bonus type="number">2</bonus>
+				<carried type="number">1</carried>
+				<checkpenalty type="number">-2</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">4,165 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>Hide armor is made up of the tanned and preserved skin of any thick-hided beast.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">4</maxstatbonus>
+				<name type="string">+2 Hide</name>
+				<nonid_name type="string">Magical Hide</nonid_name>
+				<properties type="string">magic</properties>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">15</speed20>
+				<speed30 type="number">20</speed30>
+				<spellfailure type="number">20</spellfailure>
+				<subtype type="string">Medium</subtype>
+				<type type="string">Armor</type>
+				<weight type="number">25</weight>
+			</id-00024>
+			<id-00025>
+				<aura type="string">Faint abjuration</aura>
+				<carried type="number">1</carried>
+				<cl type="number">1</cl>
+				<cost type="string">50 gp</cost>
+				<count type="number">4</count>
+				<description type="formattedtext">
+					<p>A potion is a magic liquid that produces its effect when imbibed. A potion can be used only once.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Potion (Shield of Faith +2)</name>
+				<nonid_name type="string">Magical Potion</nonid_name>
+				<showonminisheet type="number">1</showonminisheet>
+				<type type="string">Potion</type>
+				<weight type="number">0</weight>
+			</id-00025>
+			<id-00026>
+				<ac type="number">0</ac>
+				<aura type="string">Faint evocation</aura>
+				<bonus type="number">1</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">2,312 gp</cost>
+				<count type="number">1</count>
+				<critical type="string">x2</critical>
+				<damage type="string">1d6</damage>
+				<damagetype type="string">Slashing</damagetype>
+				<description type="formattedtext">
+					<p>
+						<b>Benefit: </b>A traditional klar counts as a light wooden shield with armor spikes. A metal klar counts as a light steel shield with armor spikes.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">+1 Klar</name>
+				<nonid_name type="string">Magical Klar</nonid_name>
+				<properties type="string">magic</properties>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<subtype type="string">(Martial) One-Handed Melee Weapons</subtype>
+				<type type="string">Weapon</type>
+				<weight type="number">6</weight>
+			</id-00026>
+			<id-00027>
+				<aura type="string">Faint conjuration</aura>
+				<carried type="number">1</carried>
+				<cl type="number">5</cl>
+				<cost type="string">750 gp</cost>
+				<count type="number">2</count>
+				<description type="formattedtext">
+					<p>A potion is a magic liquid that produces its effect when imbibed. A potion can be used only once.</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Potion (Cure Serious Wounds)</name>
+				<nonid_name type="string">Magical Potion</nonid_name>
+				<showonminisheet type="number">1</showonminisheet>
+				<type type="string">Potion</type>
+				<weight type="number">0</weight>
+			</id-00027>
+			<id-00029>
+				<ac type="number">0</ac>
+				<bonus type="number">0</bonus>
+				<carried type="number">1</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">0</cl>
+				<cost type="string">50 gp</cost>
+				<count type="number">3</count>
+				<description type="formattedtext">
+					<p />
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Garnet</name>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<subtype type="string">Gem</subtype>
+				<type type="string">Wealth</type>
+				<weight type="number">0</weight>
+			</id-00029>
+			<id-00030>
+				<ac type="number">0</ac>
+				<aura type="string">Faint necromancy</aura>
+				<bonus type="number">1</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">8,340 gp</cost>
+				<count type="number">1</count>
+				<critical type="string">x3</critical>
+				<damage type="string">2d6</damage>
+				<damagetype type="string">Bludgeoning</damagetype>
+				<description type="formattedtext">
+					<p>The crude metal of this massive hammer's head ends in multiple blunt spikes that channel the momentum of a powerful swing. Weapons Chart Entry</p>
+				</description>
+				<isidentified type="number">0</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">+1 Thundering Earth breaker</name>
+				<nonid_name type="string">Magical Earth breaker</nonid_name>
+				<properties type="string">magic, thundering</properties>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<subtype type="string">(Martial) Two-Handed Melee Weapons</subtype>
+				<type type="string">Weapon</type>
+				<weight type="number">14</weight>
+			</id-00030>
+			<id-00031>
+				<aura type="string">faint necromancy</aura>
+				<carried type="number">1</carried>
+				<cl type="number">5</cl>
+				<cost type="string">6,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>These thick brass and leather bracers allow the wearer to tear through bone and muscle like paper. Once per day, as part of a melee attack, the wearer can activate the bracers to inflict a horrific injury on an opponent. If the attack hits, the target must make a DC 14 Will save. If the save fails, the Wand reduces the target's Strength, Dexterity, or Constitution (wearer's choice) by -6. This penalty cannot reduce the target's ability score below 1. The injury heals over time, reducing the penalty by 1 for each day that passes since the time of the injury, and is immediately removed by <i>heal </i>, <i>regenerate </i>, <i>restoration </i>, or any magic that can break a curse.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Bonebreaker Bracers</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, bestow curse</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">wrists</slot>
+				<subtype type="string">Magic Wondrous Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">2</weight>
+			</id-00031>
+			<id-00032>
+				<ac type="number">0</ac>
+				<aura type="string">strong divination</aura>
+				<bonus type="number">0</bonus>
+				<carried type="number">1</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">13</cl>
+				<cost type="string">62,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>
+						<b>Alignment </b>neutral good; <b>Senses </b>30 ft.</p>
+					<p>
+						<b>Intelligence </b>14; <b>Wisdom </b>16; <b>Charisma </b>14; <b>Ego </b>14</p>
+					<p>
+						<b>Language </b>speech (Common and four other languages)</p>
+					<p>This golden gem-studded helmet acts like a crown of conquest and grants its wielder three performance or teamwork feats. The wearer can use each of these feats as if it were on his feat list. Once chosen, at the time of the item's creation, these feats cannot be changed. The helmet must be worn for 24 hours in order to gain the teamwork or performance feats.</p>
+					<p>Furthermore this helmet can speak through a central ruby that sits over the nose guard of the helmet. It knows Common and four other languages. These helmets are always confident-even arrogant-and give a running commentary of the battle, praising heroism, chiding tactical missteps, and giving its wearer and its allies martial advice. It has the following other powers.</p>
+					<p>Three times per day, it can affect its wearer or an ally within 30 feet as the true strike spell. Three times per day, it can attempt to demoralize all enemies within 30 feet as a free action, as if using the Intimidate skill. The helmet's Intimidate is bonus +17.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Helmet of the Golden General</name>
+				<pfslegal type="string">False</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, the item's performance and teamwork feat, bless, eagle's splendor, prayer, scare, true strike</prerequisites>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">head</slot>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<type type="string">Intelligent Item</type>
+				<weight type="number">3</weight>
+			</id-00032>
+			<id-00033>
+				<aura type="string">moderate transmutation</aura>
+				<carried type="number">1</carried>
+				<cl type="number">11</cl>
+				<cost type="string">46000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>This grotesque collar is useful to any witch who is eager to form a coven, but would rather avoid associating with one or more evil hags. The collar is a crude band of iron from which hang the fistsized shrunken heads of three hags (an annis hag, a green hag, and a sea hag). The heads remain semi-animate-they occasionally twitch, blink, coo softly, or whisper curses at the wearer, each other, or anyone else nearby. A witch with the coven hex who wears the collar gains access to the following powers.</p>
+					<p>
+						<i>Champion of the Unbound Coven </i>: If the wearer joins a coven, the coven can ignore the requirement to have at least one hag as a member. Each of the coven members must still have the coven hex, and one of the members must be at least a 9th-level witch.</p>
+					<p>
+						<i>Dreadful Gaze </i>: Three times per day as a swift action, the wearer can command the hags' heads to lock their terrible gazes on one humanoid within 30 feet. The target of this gaze attack must succeed at a DC 15 Will save or become paralyzed with terror (as the effect of the <i>hold person </i>spell). This is a mind-affecting fear effect.</p>
+					<p>
+						<i>Hag Form </i>: Once per day as a standard action, the wearer can assume the form of a powerfully built Medium crone that resembles the horrific union of an annis hag, a green hag, and a sea hag. This metamorphosis is identical to the <i>transformation </i>spell, including the violent change to the wearer's mindset and the loss of spellcasting ability.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Iron Collar of the Unbound Coven</name>
+				<pfslegal type="string">False</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, Craft (leather) 4 ranks, alter self, hold person, transformation, coven hex</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">neck</slot>
+				<subtype type="string">Magic   Wondrous   Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">2</weight>
+			</id-00033>
+			<id-00034>
+				<aura type="string">moderate divination</aura>
+				<carried type="number">1</carried>
+				<cl type="number">6</cl>
+				<cost type="string">8000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>The original color of these supple, calfskin gloves is obfuscated by layers of brown bloodstains that persist through any amount of cleaning. If the gloves are soaked in the blood of a recently killed creature, the wearer gains a +1 insight bonus on attack rolls and damage rolls against creatures of the same type (or subtype for humanoids or outsiders, per the ranger's favored enemy class feature) for 1 hour. If the gloves are worn by a slayer, the bonus on damage rolls is equal the slayer's studied target bonus. Creatures that lack blood, such as skeletons, golems, or clockwork creatures, cannot activate the gloves' ability.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Bloodstained Gloves</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, instant enemy</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">hands</slot>
+				<subtype type="string">Magic   Wondrous   Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">5</weight>
+			</id-00034>
+			<id-00036>
+				<aura type="string">faint conjuration</aura>
+				<carried type="number">1</carried>
+				<cl type="number">3</cl>
+				<cost type="string">12,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>As long as this belt's wearer doesn't move more than 5 feet during her turn, she ignores the penalties for being fatigued, shaken, or sickened until the end of her next turn or until she moves more than 5 feet, whichever occurs first. While she does not take any of the penalties of those conditions, she is considered to be under the effect of those conditions until they end or are removed.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Belt of Equilibrium</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, lesser restoration, remove fear</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">belt</slot>
+				<subtype type="string">Magic Wondrous Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">1</weight>
+			</id-00036>
+			<id-00037>
+				<aura type="string">moderate transmutation</aura>
+				<carried type="number">1</carried>
+				<cl type="number">6</cl>
+				<cost type="string">20,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>These goggles' dark lenses are made of round obsidian sheets thin enough to see through. They grant the wearer darkvision 120, as well as a +4 competence bonus on Perception checks and Survival checks made to track while underground.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Darklands Goggles</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, darkvision, terrain bond (Ultimate Magic)</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">eyes</slot>
+				<subtype type="string">Magic Wondrous Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">0</weight>
+			</id-00037>
+			<id-00038>
+				<aura type="string">moderate transmutation</aura>
+				<carried type="number">1</carried>
+				<cl type="number">8</cl>
+				<cost type="string">4,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>This attractive silver headband is decorated with a number of small red and orange gemstones. The headband grants the wearer an enhancement bonus to Charisma of +2, +4, or +6. Treat this as a temporary ability bonus for the first 24 hours the headband is worn.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<name type="string">Headband of Alluring Charisma +2</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, eagle's splendor</prerequisites>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">headband</slot>
+				<subtype type="string">Magic Wondrous Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">1</weight>
+			</id-00038>
+			<id-00039>
+				<ac type="number">0</ac>
+				<aura type="string">faint conjuration</aura>
+				<bonus type="number">0</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">8000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>These sturdy, leather-soled cloth boots have straps at the ankles and calves to ensure a snug fit. Once per day, when the wearer of the boots is grappled, pinned, or entangled, he may transfer himself to any spot within 30 feet. This acts as if the wearer had used a <i>dimension door </i>spell. A gnome wearing these boots may instead transfer himself up to 400 feet.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Boots of Escape</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, dimension door, creator must be a gnome or a wizard specialized in the school of conjuration</prerequisites>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">feet</slot>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<subtype type="string">Magic   Wondrous   Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">1</weight>
+			</id-00039>
+			<id-00040>
+				<ac type="number">0</ac>
+				<aura type="string">faint abjuration</aura>
+				<bonus type="number">0</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">0</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">10,000 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>These steel pauldrons are engraved with images of charging bulls. When their wearer makes a bull rush combat maneuver, she can make the check twice and take the better result. Furthermore, they grant a +2 enhancement bonus to CMD against bull rushes.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">0</maxstatbonus>
+				<name type="string">Pauldrons of the Bull</name>
+				<pfslegal type="string">True</pfslegal>
+				<prerequisites type="string">Craft Wondrous Item, bull's strength</prerequisites>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<slot type="string">shoulders</slot>
+				<speed20 type="number">0</speed20>
+				<speed30 type="number">0</speed30>
+				<spellfailure type="number">0</spellfailure>
+				<subtype type="string">Magic Wondrous Item</subtype>
+				<type type="string">Magic Wondrous Item</type>
+				<weight type="number">3</weight>
+			</id-00040>
+			<id-00042>
+				<ac type="number">6</ac>
+				<aura type="string">Faint abjuration</aura>
+				<bonus type="number">1</bonus>
+				<carried type="number">2</carried>
+				<checkpenalty type="number">-3</checkpenalty>
+				<cl type="number">5</cl>
+				<cost type="string">1,350 gp</cost>
+				<count type="number">1</count>
+				<description type="formattedtext">
+					<p>Covering only the torso, a breastplate is made up of a single piece of sculpted metal.</p>
+				</description>
+				<isidentified type="number">1</isidentified>
+				<locked type="number">1</locked>
+				<maxstatbonus type="number">3</maxstatbonus>
+				<name type="string">+1 Breastplate</name>
+				<nonid_name type="string">Magical Breastplate</nonid_name>
+				<properties type="string">magic</properties>
+				<range type="number">0</range>
+				<showonminisheet type="number">1</showonminisheet>
+				<speed20 type="number">15</speed20>
+				<speed30 type="number">20</speed30>
+				<spellfailure type="number">25</spellfailure>
+				<subtype type="string">Medium</subtype>
+				<type type="string">Armor</type>
+				<weight type="number">30</weight>
+			</id-00042>
 		</inventorylist>
 		<languagelist>
 			<id-00001>
@@ -644,7 +1213,7 @@
 				<stat type="number">2</stat>
 				<state type="number">1</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">12</total>
+				<total type="number">8</total>
 			</id-00001>
 			<id-00002>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -677,7 +1246,7 @@
 				<stat type="number">-1</stat>
 				<state type="number">1</state>
 				<statname type="string">strength</statname>
-				<total type="number">7</total>
+				<total type="number">3</total>
 			</id-00004>
 			<id-00005>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -722,7 +1291,7 @@
 				<stat type="number">2</stat>
 				<state type="number">1</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">5</total>
+				<total type="number">1</total>
 			</id-00008>
 			<id-00009>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -800,7 +1369,7 @@
 				<stat type="number">2</stat>
 				<state type="number">1</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">1</total>
+				<total type="number">-3</total>
 			</id-00016>
 			<id-00017>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -822,7 +1391,7 @@
 				<stat type="number">2</stat>
 				<state type="number">1</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">13</total>
+				<total type="number">9</total>
 			</id-00018>
 			<id-00019>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -844,7 +1413,7 @@
 				<stat type="number">2</stat>
 				<state type="number">0</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">1</total>
+				<total type="number">-3</total>
 			</id-00020>
 			<id-00021>
 				<armorcheckmultiplier type="number">1</armorcheckmultiplier>
@@ -855,7 +1424,7 @@
 				<stat type="number">2</stat>
 				<state type="number">0</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">1</total>
+				<total type="number">-3</total>
 			</id-00021>
 			<id-00022>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -877,7 +1446,7 @@
 				<stat type="number">-1</stat>
 				<state type="number">0</state>
 				<statname type="string">strength</statname>
-				<total type="number">-2</total>
+				<total type="number">-6</total>
 			</id-00023>
 			<id-00024>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -899,7 +1468,7 @@
 				<stat type="number">2</stat>
 				<state type="number">0</state>
 				<statname type="string">dexterity</statname>
-				<total type="number">1</total>
+				<total type="number">-3</total>
 			</id-00025>
 			<id-00026>
 				<armorcheckmultiplier type="number">0</armorcheckmultiplier>
@@ -1048,12 +1617,12 @@
 			</id-00013>
 		</specialabilitylist>
 		<speed>
-			<armor type="number">0</armor>
+			<armor type="number">-5</armor>
 			<base type="number">20</base>
-			<final type="number">20</final>
+			<final type="number">15</final>
 			<misc type="number">0</misc>
 			<temporary type="number">0</temporary>
-			<total type="number">20</total>
+			<total type="number">15</total>
 		</speed>
 		<spellmode type="string">standard</spellmode>
 		<spellset>
@@ -1574,6 +2143,28 @@
 			</id-00005>
 		</traitlist>
 		<weaponlist>
+			<id-00001>
+				<attacks type="number">1</attacks>
+				<bonus type="number">1</bonus>
+				<critatkrange type="number">19</critatkrange>
+				<damagelist>
+					<id-00001>
+						<bonus type="number">0</bonus>
+						<critmult type="number">2</critmult>
+						<dice type="dice">d4</dice>
+						<type type="string">piercing</type>
+					</id-00001>
+				</damagelist>
+				<isidentified type="number">1</isidentified>
+				<name type="string">Mwk Crossbow, hand</name>
+				<properties type="string">masterwork</properties>
+				<rangeincrement type="number">30</rangeincrement>
+				<shortcut type="windowreference">
+					<class>item</class>
+					<recordname>....inventorylist.id-00021</recordname>
+				</shortcut>
+				<type type="number">1</type>
+			</id-00001>
 			<id-00002>
 				<attack1 type="number">5</attack1>
 				<attack1modifier type="number">0</attack1modifier>
@@ -1710,6 +2301,51 @@
 				</shortcut>
 				<type type="number">1</type>
 			</id-00005>
+			<id-00006>
+				<attacks type="number">1</attacks>
+				<bonus type="number">0</bonus>
+				<critatkrange type="number">20</critatkrange>
+				<damagelist>
+					<id-00001>
+						<bonus type="number">0</bonus>
+						<critmult type="number">2</critmult>
+						<dice type="dice">d6</dice>
+						<stat type="string">strength</stat>
+						<type type="string">slashing</type>
+					</id-00001>
+				</damagelist>
+				<isidentified type="number">0</isidentified>
+				<name type="string">** Magical Klar **</name>
+				<properties type="string">magic</properties>
+				<shortcut type="windowreference">
+					<class>item</class>
+					<recordname>....inventorylist.id-00026</recordname>
+				</shortcut>
+				<type type="number">0</type>
+			</id-00006>
+			<id-00007>
+				<attacks type="number">1</attacks>
+				<bonus type="number">0</bonus>
+				<critatkrange type="number">20</critatkrange>
+				<damagelist>
+					<id-00001>
+						<bonus type="number">0</bonus>
+						<critmult type="number">3</critmult>
+						<dice type="dice">2d6</dice>
+						<stat type="string">strength</stat>
+						<statmult type="number">1.5</statmult>
+						<type type="string">bludgeoning</type>
+					</id-00001>
+				</damagelist>
+				<isidentified type="number">0</isidentified>
+				<name type="string">** Magical Earth breaker **</name>
+				<properties type="string">magic, thundering</properties>
+				<shortcut type="windowreference">
+					<class>item</class>
+					<recordname>....inventorylist.id-00030</recordname>
+				</shortcut>
+				<type type="number">0</type>
+			</id-00007>
 		</weaponlist>
 		<weight type="string">45</weight>
 	</character>
