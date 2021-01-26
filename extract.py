@@ -87,12 +87,28 @@ def extract_name(character):
     return extract_text(find_first_child_named(character, "name"))
 
 
+def extract_deity(character):
+    return extract_text(find_first_child_named(character, "deity"))
+
+
 def extract_level(character):
     return extract_text(find_first_child_named(character, "level"))
 
 
-def extract_class_level(character):
-    return extract_text(find_first_child_named(character, "classlevel"))
+def extract_classes(character):
+    classes = []
+    for class_element in [
+        el
+        for el in find_first_child_named(character, "classes").childNodes
+        if isinstance(el, xml.dom.minidom.Element)
+    ]:
+        classes.append(
+            {
+                "name": extract_text(find_first_child_named(class_element, "name")),
+                "level": extract_text(find_first_child_named(class_element, "level")),
+            }
+        )
+    return classes
 
 
 def extract_race(character):
@@ -105,6 +121,18 @@ def extract_age(character):
 
 def extract_appearance(character):
     return extract_text(find_first_child_named(character, "appearance"))
+
+
+def extract_gender(character):
+    return extract_text(find_first_child_named(character, "gender"))
+
+
+def extract_height(character):
+    return extract_text(find_first_child_named(character, "height"))
+
+
+def extract_weight(character):
+    return extract_text(find_first_child_named(character, "weight"))
 
 
 def extract_abilities(character):
@@ -148,6 +176,10 @@ def extract_saves(character):
 
 
 def extract_alignment(character):
+    return extract_text(find_first_child_named(character, "alignment"))
+
+
+def extract_diety(character):
     return extract_text(find_first_child_named(character, "alignment"))
 
 
@@ -339,6 +371,76 @@ def extract_inventory(character):
             }
         )
     return inventory
+
+
+def extract_weapons(character):
+    weapons = []
+    for weapon_element in [
+        el
+        for el in find_first_child_named(character, "weaponlist").childNodes
+        if isinstance(el, xml.dom.minidom.Element)
+    ]:
+        weapon = {}
+        weapon["name"] = extract_text(find_first_child_named(weapon_element, "name"))
+        weapon["attacks"] = extract_text(
+            find_first_child_named(weapon_element, "attacks")
+        )
+
+        bonus_string = ""
+        for bonus in range(1, int(weapon["attacks"]) + 1):
+            if bonus > 1:
+                bonus_string += "/"
+            bonus_string += extract_text(
+                find_first_child_named(weapon_element, "attack" + str(bonus))
+            )
+        weapon["attack_bonus"] = bonus_string
+        weapon["crit_attack_range"] = extract_text(
+            find_first_child_named(weapon_element, "critatkrange")
+        )
+        for damage_element in [
+            el
+            for el in find_first_child_named(weapon_element, "damagelist").childNodes
+            if isinstance(el, xml.dom.minidom.Element)
+        ]:
+            weapon["crit_multiplier"] = extract_text(
+                find_first_child_named(damage_element, "critmult")
+            )
+            weapon["damage_stat"] = find_first_child_named(damage_element, "stat")
+            weapon["damage_stat_max"] = find_first_child_named(
+                damage_element, "statmax"
+            )
+            weapon["damage_stat_multiplier"] = find_first_child_named(
+                damage_element, "statmult"
+            )
+            weapon["damage_dice"] = extract_text(
+                find_first_child_named(damage_element, "dice")
+            )
+            weapon["damage_bonus"] = extract_text(
+                find_first_child_named(damage_element, "bonus")
+            )
+            weapon["damage_type"] = ",".join(
+                [
+                    type[0].upper()
+                    for type in extract_text(
+                        find_first_child_named(damage_element, "type")
+                    )
+                    .strip()
+                    .split(",")
+                ]
+            )
+        max_ammo = extract_text(find_first_child_named(weapon_element, "maxammo"))
+        ammo = extract_text(find_first_child_named(weapon_element, "ammo"))
+        weapon["ammo"] = (
+            None
+            if max_ammo == "0"
+            else (str(int(max_ammo) - (int(ammo) if ammo else 0)) if max_ammo else None)
+        )
+        range_inc = extract_text(
+            find_first_child_named(weapon_element, "rangeincrement")
+        )
+        weapon["range"] = None if range_inc == "0" else range_inc
+        weapons.append(weapon)
+    return weapons
 
 
 def extract_special_abilities(character):
