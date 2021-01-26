@@ -929,7 +929,16 @@ def to_pdf(filename):
     for weapon in extract_weapons(character):
         can.drawString(40, 510 - (count * 53.5), weapon["name"])
         can.drawString(180, 505 - (count * 53.5), weapon["attack_bonus"])
-        can.drawString(260, 505 - (count * 53.5), weapon["damage_dice"])
+        damage_bonus = int(weapon["damage_bonus"])
+        can.drawString(
+            260,
+            505 - (count * 53.5),
+            "{0}{1}{2}".format(
+                weapon["damage_dice"],
+                damage_sign_of(damage_bonus),
+                abs_value_of(damage_bonus),
+            ),
+        )
         can.drawString(350, 505 - (count * 53.5), weapon["crit_attack_range"])
         can.drawString(395, 505 - (count * 53.5), weapon["crit_multiplier"])
         can.drawString(438, 505 - (count * 53.5), weapon["damage_type"])
