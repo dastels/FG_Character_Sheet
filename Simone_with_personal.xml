@@ -688,6 +688,7 @@
 				<stat type="number">3</stat>
 				<state type="number">1</state>
 				<statname type="string">intelligence</statname>
+				<sublabel type="string">Alchemy</sublabel>
 				<total type="number">3</total>
 			</id-00005>
 			<id-00006>
